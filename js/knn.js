@@ -7,9 +7,6 @@ var dimension = 0;
 var alldata2;
 var dimension2 = 0; 
 
-//don't forget to initialize the attribute!
-var attibute = 4;
-
 //load data for training set
 $(document).ready(function() {
     if(isAPIAvailable()) {
@@ -129,7 +126,7 @@ function printTable2(file) {
 
 //REMEMBER : 1. change the 'k', 2. change the 'cat', 3. change nominal data type
 function countKNN() {
-    var cat = [[0,'Iris-setosa'],[0,'Iris-versicolor'],[0,'Iris-virginica']];       //define possible class and counter
+    var cat = [[0,'1'],[0,'2']];       //define possible class and counter
     //var counter = [0,0,0];      //counter for k 
     var k = 5;      //define nearest neighbor 
     var correct = 0;    //for count the accuracy 
@@ -140,7 +137,7 @@ function countKNN() {
             cat[x][0] = 0;
         }
 
-        console.log(i);
+        //console.log(i);
         for(var j = 0; j < alldata.length; j++) {
             var totalEuc = 0; 
                     
@@ -164,7 +161,7 @@ function countKNN() {
             //console.log(fixEuc);
         }
 
-        console.log("AFTER SORT");
+        //console.log("AFTER SORT");
         //sort ascending by euclidean distance value 
         alldata.sort(function(a,b) {
             return a[dimension] - b[dimension];
@@ -177,7 +174,7 @@ function countKNN() {
         //count detected class
         for(var x = 0; x < k; x++) {
             for(var y = 0; y < cat.length; y++) {
-                console.log(alldata[x][dimension-1]);
+                //console.log(alldata[x][dimension-1]);
                 if(alldata[x][dimension-1] == cat[y][1]) {
                     cat[y][0]++;
                 } 
@@ -188,14 +185,18 @@ function countKNN() {
         cat.sort(function(a,b) {
             return b[0] - a[0];
         });
+        //console.log("result");
+        console.log(i + " = " + cat[0][1]);
+        	
+        $( "#result" ).append( "<p>"+ i + " = " + cat[0][1] + "</p>" );
 
         //check if prediction = actual condition
-        if(alldata2[i][dimension-1] == cat[0][1]) {
-            correct++;
-        }
+        // if(alldata2[i][dimension-1] == cat[0][1]) {
+        //     correct++;
+        // }
     }
 
     //count the accuracy
-    var accuracy = correct / alldata2.length * 100; 
-    console.log(accuracy);
+    // var accuracy = correct / alldata2.length * 100; 
+    // console.log(accuracy);
 }

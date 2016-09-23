@@ -10,11 +10,14 @@
     </head>
     <body>
         <div class="row">
-            <div class="col s6">
-                <div id="inputtrain" class="clearfix">
+            <div class="col s6" >
+                <div class="col s8 offset-s2" style="border-bottom:1px solid #000;margin-bottom:20px;">
+                    <h3 style="text-align:center;">TRAINING SET</h3>
+                </div>
+                <div id="inputtrain" class="clearfix" style="text-align:center;">
                     <input type="file" id="files" name="files[]" multiple />
                 </div>
-                <div class="col s12">
+                <div class="col s12" style="text-align:center;">
                     <output id="list"></output>
                 </div>
                 <div class="col s12">
@@ -22,14 +25,21 @@
                 </div>
             </div>
             <div class="col s6">
-                <div id="inputtest" class="clearfix">
+                <div class="col s8 offset-s2" style="border-bottom:1px solid #000;margin-bottom:20px;">
+                    <h3 style="text-align:center;">TESTING SET</h3>
+                </div>>
+                <div id="inputtest" class="clearfix" style="text-align:center;">
                     <input type="file" id="files2" name="files[]" multiple />
                 </div>
-                <div class="col s12">
+                <div class="col s12" style="text-align:center;">
                     <output id="list2"></output>
                 </div>
                 <div class="col s12">
                     <table id="contents2"></table>
+                </div>
+                <div class="col s12" id="result" >
+                    <h5 style="text-align:center;">RESULT</h5>
+                    
                 </div>
             </div>
         </div>
