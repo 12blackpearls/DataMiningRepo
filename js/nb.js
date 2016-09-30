@@ -1,6 +1,6 @@
-//THIS IS FOR KNN - SPLIT TRAINING SET AND TESTING SET 
-//ASSOCIATED WITH KNN.HTML
-//REMEMBER : 1. change the 'k', 2. change the 'cat', 3. change array w/ nominal data type
+//THIS IS FOR NB - SPLIT TRAINING SET AND TESTING SET 
+//ASSOCIATED WITH NB.HTML
+//REMEMBER : 1. change the 'cat'
 
 var alldata;
 var dimension = 0;
@@ -120,77 +120,97 @@ function printTable2(file) {
     
     $('#contents2').html(html);
     //checking();
-    countKNN();
+    countNB();
     };
     reader.onerror = function(){ alert('Unable to read ' + file.fileName); };
 }
 
 
-//REMEMBER : 1. change the 'k', 2. change the 'cat', 3. change nominal data type
-function countKNN() {
-    var cat = [[0,'1'],[0,'2']];       //define possible class and counter
+
+function countNB() {
+    var cat = [[0,'EWS'],[0,'BL']];       //define possible class and counter
     //var counter = [0,0,0];      //counter for k 
-    var k = 7;      //define nearest neighbor 
     var correct = 0;    //for count the accuracy 
+    console.log(dimension);
     for(var i = 0; i < alldata2.length; i++) {
 
         //initialize 
-        for(var x = 0; x < cat.length; x++) {
-            cat[x][0] = 0;
-        }
-
-        //console.log(i);
-        for(var j = 0; j < alldata.length; j++) {
-            var totalEuc = 0; 
-                    
-            for(var x = 0; x < dimension-1; x++) {
-                if(x == 99) {          //data w/ nominal type ! 
-                    if(alldata2[i][x] == alldata[j][x]) {
-                        totalEuc = totalEuc + 0; 
-                        //console.log("yey sama");
-                    } else {
-                        totalEuc = totalEuc + 2;
-                        //console.log("yey beda");
-                    }
-                    
-                } else {
-                    totalEuc = totalEuc + Math.pow(alldata2[i][x]-alldata[j][x],2);
-                }
-            }
-
-            var fixEuc = Math.sqrt(totalEuc);
-            alldata[j][dimension] = fixEuc;
-            //console.log(fixEuc);
-        }
-
-        //console.log("AFTER SORT");
-        //sort ascending by euclidean distance value 
-        alldata.sort(function(a,b) {
-            return a[dimension] - b[dimension];
-        });
-
-        // for(var x = 0; x < alldata.length; x++) {
-        //     console.log(alldata[x][dimension]);
+        // for(var x = 0; x < cat.length; x++) {
+        //     cat[x][0] = 0;
         // }
-        
-        //count detected class
-        for(var x = 0; x < k; x++) {
-            for(var y = 0; y < cat.length; y++) {
-                //console.log(alldata[x][dimension-1]);
-                if(alldata[x][dimension-1] == cat[y][1]) {
-                    cat[y][0]++;
-                } 
-            }
-        }
+        //console.log(i);
 
-        //sort detected class descending
+        var catval = [];
+        var helpcount = 0; 
+
+        for(var xxx = 0; xxx < cat.length; xxx++) {
+            //initialize 
+            // for(var x = 0; x < cat.length; x++) {
+                cat[xxx][0] = 0;
+            // }
+
+            var curmean = []; 
+
+            for(var x = 0; x < dimension-1; x++) {
+                //console.log(x);
+                curmean[x] = 0; 
+                helpcount = 0;
+                for(var y = 0; y < alldata.length; y++) {
+                    //console.log(alldata[y][dimension-1]);
+                    if(alldata[y][dimension-1] == cat[xxx][1]) {
+                        curmean[x] = parseFloat(curmean[x]) + parseFloat(alldata[y][x]);
+                        //console.log(curmean[x]);
+                        helpcount++;
+                    }
+                }
+                curmean[x] = parseFloat(curmean[x]) / parseFloat(helpcount);
+                //console.log(curmean[x]);
+            }
+
+            var curvar = [];
+
+            for(var x = 0; x < dimension-1; x++) {
+                curvar[x] = 0;
+                for(var y = 0; y < alldata.length; y++) {
+                    if(alldata[y][dimension-1] == cat[xxx][1]) {
+                        curvar[x] = parseFloat(curvar[x]) + Math.pow(parseFloat(alldata[y][x] - curmean[x]),2);
+                    }
+                }
+                curvar[x] = parseFloat(curvar[x]) / parseFloat(helpcount - 1);
+                //console.log(curvar[x]);
+            }
+
+            cat[xxx][0] = parseFloat(helpcount) / parseFloat(alldata.length);
+            //console.log(cat[xxx][0]);
+
+            console.log("---");
+
+            for(var x = 0; x < dimension-1; x++) {
+                
+                // cat[xxx][0] = parseFloat(cat[xxx][0]) * parseFloat(curvar[x]);
+                // console.log(cat[xxx][0]);
+
+                //console.log(Math.exp(100));
+                //console.log((1 / Math.sqrt(parseFloat(2 * Math.PI * parseFloat(curvar[x])))) * Math.exp(parseFloat((-1 * Math.pow(parseFloat(parseFloat(alldata2[i][x]) - parseFloat(curmean[x])),2))) / parseFloat(2 * parseFloat(curvar[x]))));
+
+                cat[xxx][0] = parseFloat(cat[xxx][0]) * parseFloat(1 / Math.sqrt(parseFloat(2 * Math.PI * parseFloat(curvar[x])))) * Math.exp(parseFloat((-1 * Math.pow(parseFloat(parseFloat(alldata2[i][x]) - parseFloat(curmean[x])),2))) / parseFloat(2 * parseFloat(curvar[x])));
+                
+            }
+
+            console.log("YEY");
+
+            console.log(cat[xxx][0]);
+            //check if prediction = actual condition
+            // if(alldata2[i][dimension-1] == cat[0][1]) {
+            //     correct++;
+            // }
+        }
         cat.sort(function(a,b) {
             return b[0] - a[0];
         });
 
-
-        //console.log("result");
-        console.log(i + " = " + cat[0][1]);
+        console.log("result");
+        console.log(cat[0][1]);
         	
         $( "#result" ).append( "<p>"+ i + " = " + cat[0][1] + "</p>" );
 
